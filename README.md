@@ -88,5 +88,28 @@ ke.yml
     pip:
       name: docker-compose
       version: 1.9.0
-   
-
+  - name: copy docker-compose
+    copy:
+      src: ./docker-compose.yml
+      dest: ./docker-compose.yml
+  - name: run docker-compose
+    environment:
+      BUILD_TIMESTAMP: "{{ lookup('env', 'BUILD TIMESTAMP') }}"
+    docker_service:
+      project_src: .
+      state: present
+      restarted: yes
+```
+docker-compose.yml
+```
+version: "2"
+services:
+  calculator:
+    image: leszko/calculator:latest
+    ports:
+    - 8080
+  redis:
+    deploy:
+      replicas: 1
+    imate: redis:latest
+```
